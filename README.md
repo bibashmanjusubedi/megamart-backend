@@ -1,4 +1,5 @@
-﻿MegaMart.Api/
+﻿```
+MegaMart.Api/
 ├── Controllers/                 # REST API endpoints
 │   ├── AuthController.cs        # POST /api/auth/register, POST /api/auth/login
 │   ├── ProductsController.cs    # GET, POST, PUT, DELETE /api/products
@@ -34,8 +35,11 @@
 ├── appsettings.Development.json
 ├── Program.cs                   # All DI registrations, EF configuration, and middleware pipeline
 └── MegaMart.Api.csproj          # Single project file
+```
 
-
-# ER Diagram
+# ER Diagram Options
 * [OptionAPreferred](./Screenshots/OptionA.PNG)
 * [OptionB](./Screenshots/OptionB.PNG)
+
+# ER Diagram in Use
+![OptionA](./Screenshots/OptionA.PNG)
