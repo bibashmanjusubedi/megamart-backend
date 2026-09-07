@@ -1,0 +1,26 @@
+## Visual Studio cache & user files
+.vs/
+*.csproj.user
+*.suo
+*.user
+*.userprefs
+*.sln.docstates
+
+## Build outputs & binaries
+[Bb]in/
+[Oo]bj/
+
+## Sensitive settings
+appsettings.Development.json
+
+## Tooling & Publish
+megamart-backend.http.user
+*.http.user
+publish/
+[Rr]elease/
+[Dd]ebug/
+
+## OS files
+Thumbs.db
+desktop.ini
+.DS_Store
