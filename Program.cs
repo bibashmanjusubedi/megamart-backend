@@ -3,6 +3,7 @@ using megamart_backend.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using megamart_backend.Repositories;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,6 +51,8 @@ builder.Services.AddOpenApi();
 // Configure Swashbuckle/ Swagger Generator
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 var app = builder.Build();
