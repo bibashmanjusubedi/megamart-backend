@@ -4,6 +4,10 @@
         string Name
     );
 
+    public record CategoryUpdateDto(
+        string Name
+    );
+
     public record CategoryResponseDto(
         int Id,
         string Name
