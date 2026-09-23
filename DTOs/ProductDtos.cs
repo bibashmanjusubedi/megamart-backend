@@ -10,6 +10,17 @@
         int CategoryId
     );
 
+
+    public record ProductUpdateDto(
+        string Name,
+        decimal Price,
+        int StockQuantity,
+        string? ImageUrl,
+        string? ImagePublicId,
+        string Description,
+        int CategoryId
+    );
+
     public record ProductResponseDto(
         int Id,
         string Name,
