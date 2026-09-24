@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using megamart_backend.DTOs;
 using megamart_backend.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace megamart_backend.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase

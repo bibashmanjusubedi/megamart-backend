@@ -17,7 +17,8 @@ namespace megamart_backend.Controllers
             _productService = productService;
         }
 
-        // GET: api/products?categoryId=1
+        // GET: api/products?categoryId=1 (Public)
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(IReadOnlyList<ProductResponseDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll([FromQuery] int? categoryId = null)
@@ -26,7 +27,8 @@ namespace megamart_backend.Controllers
             return Ok(products);
         }
 
-        // GET: api/products/{id}
+        // GET: api/products/{id} (Public)
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(ProductResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -43,8 +45,9 @@ namespace megamart_backend.Controllers
         }
 
 
-        // POST: api/products
+        // POST: api/products (Admin only)
         // Optional: Add [Authorize(Roles = "Admin")] to secure endpoint for administrators only
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(typeof(ProductResponseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -67,8 +70,9 @@ namespace megamart_backend.Controllers
             }
         }
 
-        // PUT: api/products/{id}
+        // PUT: api/products/{id} (Admin only)
         // Optional: Add [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -99,8 +103,9 @@ namespace megamart_backend.Controllers
         }
 
 
-        // DELETE: api/products/{id}
+        // DELETE: api/products/{id} (Admin only)
         // Optional: Add [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

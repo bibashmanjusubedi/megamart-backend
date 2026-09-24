@@ -36,7 +36,8 @@ namespace megamart_backend.Controllers
             return null;
         }
 
-        // POST: api/orders
+        // POST: api/orders (Customer checkout)
+        [Authorize(Roles = "Customer")]
         [HttpPost]
         [ProducesResponseType(typeof(OrderResponseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -75,7 +76,8 @@ namespace megamart_backend.Controllers
 
         }
 
-        // GET: api/orders/{id}
+        // GET: api/orders/{id} (Admin or the Customer who owns this order)
+        [Authorize(Roles = "Customer,Admin")]
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(OrderResponseDto),StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -106,7 +108,8 @@ namespace megamart_backend.Controllers
             }
         }
 
-        // GET: api/orders/my-orders
+        // GET: api/orders/my-orders (Customer order history)
+        [Authorize(Roles = "Customer")]
         [HttpGet("my-orders")]
         [ProducesResponseType(typeof(IReadOnlyList<OrderResponseDto>),StatusCodes.Status200OK)]
         public async Task<IActionResult> GetMyOrders()
@@ -121,7 +124,7 @@ namespace megamart_backend.Controllers
             return Ok(orders);
         }
 
-        // GET: api/orders (Admin only)
+        // GET: api/orders (Admin only) (Admin dashboard: all orders platform-wide)
         [Authorize(Roles ="Admin")]
         [HttpGet]
         [ProducesResponseType(typeof(IReadOnlyList<OrderResponseDto>), StatusCodes.Status200OK)]
