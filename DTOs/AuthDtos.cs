@@ -21,4 +21,6 @@
         string Role,
         string Token
     );
+
+    public record UpdateUserRoleDto(string Role);
 }

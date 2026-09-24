@@ -6,5 +6,6 @@ namespace megamart_backend.Services.Interfaces
     {
         Task<AuthResponseDto> RegisterAsync(RegisterDto dto);
         Task<AuthResponseDto> LoginAsync(LoginDto dto);
+        Task<bool> UpdateUserRoleAsync(int targetUserId, string newRole, int currentAdminId);
     }
 }

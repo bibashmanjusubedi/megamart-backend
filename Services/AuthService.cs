@@ -6,6 +6,7 @@ using megamart_backend.DTOs;
 using megamart_backend.Models;
 using megamart_backend.Repositories;
 using megamart_backend.Services.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace megamart_backend.Services
 {
@@ -105,6 +106,43 @@ namespace megamart_backend.Services
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task<bool> UpdateUserRoleAsync(int targetUserId,string newRole,int currentAdminId)
+        {
+            // 1. Sanitize & validate the requested role
+            var formattedRole = newRole.Trim();
+            if (!string.Equals(formattedRole,"Admin", StringComparison.OrdinalIgnoreCase) && 
+                !string.Equals(formattedRole,"Customer",StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ArgumentException("Invalid role. Role must be either 'Admin' or 'Customer'.");
+            }
+
+            // Standardize casing to "Admin" or "Customer"
+            formattedRole = char.ToUpper(formattedRole[0]) + formattedRole.Substring(1).ToLower();
+
+            // 2. Prevent the calling admin from demoting themselves
+            if (targetUserId == currentAdminId  && formattedRole !="Admin")
+            {
+                throw new InvalidOperationException("You cannot demote your own administrator account.");
+            }
+
+            // 3. Find target user
+            var user = await _unitOfWork.Users.GetByIdAsync(targetUserId);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            // 4. Update and persist
+            user.Role = formattedRole;
+            _unitOfWork.Users.Update(user);
+
+            await _unitOfWork.CompleteAsync();
+
+            return true;
+
         }
     }
 }
