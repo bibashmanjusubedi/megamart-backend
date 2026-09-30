@@ -86,7 +86,7 @@ namespace megamart_backend.Controllers
 
         // DELETE: api/categories/{id} (Admin only)
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id:int")]
+        [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
