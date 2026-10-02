@@ -55,12 +55,16 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI(); // Hosts the UI at /swagger
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.MapOpenApi();
+//    app.UseSwagger();
+//    app.UseSwaggerUI(); // Hosts the UI at /swagger
+//}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+app.MapOpenApi();
 
 app.UseHttpsRedirection();
 app.UseCors("AllowReactApp");
