@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using megamart_backend.Repositories;
+using megamart_backend.Services.Interfaces;
+using megamart_backend.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,8 +53,27 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
+
+
+// --- ADD THIS BLOCK TO RUN THE SEEDER ON STARTUP ---
+using ( var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        await DbInitializer.InitializeAsync(context);
+    }
+    catch(Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database");
+    }
+}
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
