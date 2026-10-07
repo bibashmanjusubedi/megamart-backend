@@ -2,6 +2,7 @@
 using megamart_backend.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace megamart_backend.Data
 {
@@ -136,6 +137,26 @@ namespace megamart_backend.Data
 
                 context.Products.AddRange(products);
                 await context.SaveChangesAsync();
+            }
+
+            // 3. Seed Admin User
+            var adminEmail = "admin@megamart.com"; // admin email
+            if (!await context.Users.AnyAsync(u => u.Email == adminEmail))
+            {
+                var adminUser = new User
+                {
+                    Name = "Admin User",
+                    Email = adminEmail,
+                    Role = "Admin"
+                };
+
+                // Hash the password securely so your login endpoint can verify it
+                var passwordHasher = new PasswordHasher<User>();
+                adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "Admin@123"); // admin password
+
+                await context.Users.AddAsync(adminUser);
+                await context.SaveChangesAsync();
+
             }
         }
     }
