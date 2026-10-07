@@ -88,8 +88,13 @@ using ( var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<AppDbContext>();
         await DbInitializer.InitializeAsync(context);
+
+        // Add this line right here to fix the PostgreSQL sequence
+        await context.Database.ExecuteSqlRawAsync(
+            "SELECT setval(pg_get_serial_sequence('\"Categories\"', 'Id'), (SELECT COALESCE(MAX(\"Id\"), 1) FROM \"Categories\"));"
+            );
     }
-    catch(Exception ex)
+    catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred while seeding the database");

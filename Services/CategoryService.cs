@@ -61,6 +61,9 @@ namespace megamart_backend.Services
 
             category.Name = dto.Name.Trim();
             _unitOfWork.Categories.Update(category);
+
+            // ADD THIS LINE TO COMMIT CHANGES TO THE DATABASE
+            await _unitOfWork.CompleteAsync();
             return true;
         }
 
