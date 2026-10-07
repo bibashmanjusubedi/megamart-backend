@@ -150,9 +150,11 @@ namespace megamart_backend.Data
                     Role = "Admin"
                 };
 
-                // Hash the password securely so your login endpoint can verify it
-                var passwordHasher = new PasswordHasher<User>();
-                adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "Admin@123"); // admin password
+                // Hash the password securely using BCrypt instead of default Password Hasher so your login endpoint can verify it
+                //var passwordHasher = new PasswordHasher<User>();
+                //adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "Admin@123"); // admin password
+
+                adminUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123");
 
                 await context.Users.AddAsync(adminUser);
                 await context.SaveChangesAsync();

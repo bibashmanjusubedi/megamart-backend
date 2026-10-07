@@ -75,7 +75,7 @@ namespace megamart_backend.Services
             // Generate token and return response DTO
             var token = GenerateJwtToken(user);
 
-            return new AuthResponseDto(user.Id, user.Name, user.Name, user.Role, token);
+            return new AuthResponseDto(user.Id, user.Name, user.Email, user.Role, token);
         }
 
 
