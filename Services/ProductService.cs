@@ -1,4 +1,5 @@
-﻿using megamart_backend.DTOs;
+﻿using CloudinaryDotNet.Actions;
+using megamart_backend.DTOs;
 using megamart_backend.Models;
 using megamart_backend.Repositories;
 using megamart_backend.Services.Interfaces;
@@ -38,7 +39,9 @@ namespace megamart_backend.Services
                p.ImageUrl,
                p.Description,
                p.CategoryId,
-               p.Category?.Name
+               p.Category?.Name,
+               p.SecondaryImages.Select(si => new SecondaryImageDto(si.ImageUrl, si.ImagePublicId)).ToList(),
+               p.Specifications != null ? new SpecificationsDto(p.Specifications.Model, p.Specifications.Warranty, p.Specifications.Delivery) : null
             )).ToList();
 
         }
@@ -60,7 +63,9 @@ namespace megamart_backend.Services
                product.ImageUrl,
                product.Description,
                product.CategoryId,
-               product.Category?.Name
+               product.Category?.Name,
+               product.SecondaryImages?.Select(si => new SecondaryImageDto(si.ImageUrl, si.ImagePublicId)).ToList(),
+               product.Specifications != null ? new SpecificationsDto(product.Specifications.Model, product.Specifications.Warranty, product.Specifications.Delivery) : null
             );
 
         }
@@ -81,7 +86,21 @@ namespace megamart_backend.Services
                 Price = dto.Price,
                 StockQuantity = dto.StockQuantity,
                 ImageUrl = dto.ImageUrl?.Trim(),
-                CategoryId = dto.CategoryId
+                CategoryId = dto.CategoryId,
+
+                // Map SecondaryImages if provided
+                SecondaryImages = dto.SecondaryImages?
+                                    .Select(si => new SecondaryImage { ImageUrl = si.ImageUrl, ImagePublicId = si.ImagePublicId })
+                                    .ToList() ?? new List<SecondaryImage>(),
+
+                // Map Specifications if provided
+                Specifications = dto.Specifications != null 
+                                ? new Specifications
+                                {
+                                    Model = dto.Specifications.Model,
+                                    Warranty = dto.Specifications.Warranty,
+                                    Delivery = dto.Specifications.Delivery
+                                } : new Specifications()
             };
 
 
@@ -96,7 +115,9 @@ namespace megamart_backend.Services
                 product.ImageUrl,
                 product.Description,
                 product.CategoryId,
-                product.Category.Name
+                product.Category.Name,
+                product.SecondaryImages.Select(si => new SecondaryImageDto(si.ImageUrl, si.ImagePublicId)).ToList(),
+                new SpecificationsDto(product.Specifications.Model, product.Specifications.Warranty, product.Specifications.Delivery)
             );
         }
 
@@ -121,7 +142,27 @@ namespace megamart_backend.Services
             product.Price = dto.Price;
             product.StockQuantity = dto.StockQuantity;
             product.ImageUrl = dto.ImageUrl?.Trim();
+            product.ImagePublicId = dto.ImagePublicId?.Trim();
             product.CategoryId = dto.CategoryId;
+
+            // Update Secondary Images if provided
+            if (dto.SecondaryImages != null)
+            {
+                product.SecondaryImages = dto.SecondaryImages
+                                          .Select(si => new SecondaryImage { ImageUrl = si.ImageUrl, ImagePublicId = si.ImagePublicId })
+                                          .ToList();
+            }
+
+            // Update Specificaions if provided
+            if (dto.Specifications != null)
+            {
+                product.Specifications = new Specifications
+                {
+                    Model = dto.Specifications.Model,
+                    Warranty = dto.Specifications.Warranty,
+                    Delivery = dto.Specifications.Delivery
+                };
+            }
 
             _unitOfWork.Products.Update(product);
             await _unitOfWork.CompleteAsync();

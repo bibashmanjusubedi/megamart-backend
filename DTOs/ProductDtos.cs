@@ -1,5 +1,17 @@
 ﻿namespace megamart_backend.DTOs
 {
+    public record SpecificationsDto(
+        string? Model,
+        string? Warranty,
+        string? Delivery
+    );
+
+    public record SecondaryImageDto(
+        string ImageUrl,
+        string ImagePublicId
+    );
+
+
     public record ProductCreateDto(
         string Name,
         decimal Price,
@@ -7,7 +19,9 @@
         string? ImageUrl,
         string? ImagePublicId,
         string Description,
-        int CategoryId
+        int CategoryId,
+        List<SecondaryImageDto>? SecondaryImages = null, // optional JSON payload
+        SpecificationsDto? Specifications = null //optional JSON payload
     );
 
 
@@ -18,7 +32,9 @@
         string? ImageUrl,
         string? ImagePublicId,
         string Description,
-        int CategoryId
+        int CategoryId,
+        List<SecondaryImageDto>? SecondaryImages = null,
+        SpecificationsDto? Specifications = null 
     );
 
     public record ProductResponseDto(
@@ -29,7 +45,9 @@
         string? ImageUrl,
         string Description,
         int CategoryId,
-        string? CategoryName
+        string? CategoryName,
+        List<SecondaryImageDto>? SecondaryImages = null,
+        SpecificationsDto? Specifications = null
     );
 
 }
