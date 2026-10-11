@@ -86,6 +86,7 @@ namespace megamart_backend.Services
                 Price = dto.Price,
                 StockQuantity = dto.StockQuantity,
                 ImageUrl = dto.ImageUrl?.Trim(),
+                ImagePublicId = dto.ImagePublicId,
                 CategoryId = dto.CategoryId,
 
                 // Map SecondaryImages if provided
