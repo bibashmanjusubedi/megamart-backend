@@ -41,7 +41,7 @@
         int Id,
         string Name,
         decimal Price,
-        int StockQuanity,
+        int StockQuantity,
         string? ImageUrl,
         string Description,
         int CategoryId,
