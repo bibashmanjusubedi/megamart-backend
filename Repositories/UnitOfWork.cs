@@ -12,6 +12,8 @@ namespace megamart_backend.Repositories
         public IUserRepository Users { get; }
         public IOrderRepository Orders { get; }
         public IGenericRepository <OrderItem> OrderItems { get; }
+        public ICartRepository Carts { get; }
+        public IGenericRepository <CartItem> CartItems { get; }
 
         public UnitOfWork(AppDbContext context)
         {
@@ -23,6 +25,8 @@ namespace megamart_backend.Repositories
             Users = new UserRepository(_context);
             Orders = new OrderRepository(_context);
             OrderItems = new GenericRepository<OrderItem>(_context);
+            Carts = new CartRepository(_context);
+            CartItems = new GenericRepository<CartItem>(_context);
         }
 
         public async Task<int> CompleteAsync()

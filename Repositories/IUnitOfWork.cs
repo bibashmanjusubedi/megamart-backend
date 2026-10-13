@@ -9,6 +9,8 @@ namespace megamart_backend.Repositories
         IUserRepository Users { get; }
         IOrderRepository Orders { get; }
         IGenericRepository<OrderItem> OrderItems { get; }
+        ICartRepository Carts { get; }
+        public IGenericRepository<CartItem> CartItems { get; }
 
         Task<int> CompleteAsync();
     }
