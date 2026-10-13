@@ -22,6 +22,54 @@ namespace megamart_backend.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("megamart_backend.Models.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("megamart_backend.Models.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartItems");
+                });
+
             modelBuilder.Entity("megamart_backend.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -185,6 +233,36 @@ namespace megamart_backend.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("megamart_backend.Models.Cart", b =>
+                {
+                    b.HasOne("megamart_backend.Models.User", "User")
+                        .WithOne("Cart")
+                        .HasForeignKey("megamart_backend.Models.Cart", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("megamart_backend.Models.CartItem", b =>
+                {
+                    b.HasOne("megamart_backend.Models.Cart", "Cart")
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("megamart_backend.Models.Product", "Product")
+                        .WithMany("CartItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("megamart_backend.Models.Order", b =>
                 {
                     b.HasOne("megamart_backend.Models.User", "User")
@@ -281,6 +359,11 @@ namespace megamart_backend.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("megamart_backend.Models.Cart", b =>
+                {
+                    b.Navigation("CartItems");
+                });
+
             modelBuilder.Entity("megamart_backend.Models.Category", b =>
                 {
                     b.Navigation("Products");
@@ -293,11 +376,15 @@ namespace megamart_backend.Migrations
 
             modelBuilder.Entity("megamart_backend.Models.Product", b =>
                 {
+                    b.Navigation("CartItems");
+
                     b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("megamart_backend.Models.User", b =>
                 {
+                    b.Navigation("Cart");
+
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618

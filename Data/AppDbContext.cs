@@ -14,6 +14,8 @@ namespace megamart_backend.Data
         public DbSet<User> Users => Set<User>();
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+        public DbSet<Cart> Carts => Set<Cart>();
+        public DbSet<CartItem> CartItems => Set<CartItem>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -95,6 +97,33 @@ namespace megamart_backend.Data
                 entity.HasOne(oi => oi.Product)
                       .WithMany(p => p.OrderItems)
                       .HasForeignKey(oi => oi.ProductId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // 👈 Cart Configuration (1:1 with User)
+            modelBuilder.Entity<Cart>(entity =>
+            {
+                entity.HasKey(c => c.Id);
+
+                entity.HasOne(c => c.User)
+                      .WithOne(u => u.Cart)
+                      .HasForeignKey<Cart>(c => c.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // 👈 CartItem Configuration (1:N with Cart, N:1 with Product)
+            modelBuilder.Entity<CartItem>(entity =>
+            {
+                entity.HasKey(ci => ci.Id);
+
+                entity.HasOne(ci => ci.Cart)
+                      .WithMany(c => c.CartItems)
+                      .HasForeignKey(ci => ci.CartId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(ci => ci.Product)
+                      .WithMany(p => p.CartItems)
+                      .HasForeignKey(ci => ci.ProductId)
                       .OnDelete(DeleteBehavior.Restrict);
             });
 

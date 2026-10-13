@@ -11,5 +11,8 @@
 
         // 1:N Navigation to Order
         public ICollection<Order> Orders { get; set; } = new List<Order>();
+
+        // Optional: 1:1 or 1:N navigation back to Cart
+        public Cart? Cart { get; set; }
     }
 }

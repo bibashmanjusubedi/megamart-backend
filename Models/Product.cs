@@ -22,5 +22,8 @@
 
         // 1:N Navigation to OrderItem
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
+        // Optional: Navigation back to CartItems
+        public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
     }
 }
