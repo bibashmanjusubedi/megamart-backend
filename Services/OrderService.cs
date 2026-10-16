@@ -218,7 +218,8 @@ namespace megamart_backend.Services
         public async Task<IReadOnlyList<OrderResponseDto>> GetOrdersByUserIdAsync(int userId)
         {
             // Retrieve all orders matching the user's ID
-            var orders = await _unitOfWork.Orders.FindAsync(o => o.UserId == userId);
+            //var orders = await _unitOfWork.Orders.FindAsync(o => o.UserId == userId);
+            var orders = await _unitOfWork.Orders.GetOrdersByUserIdAsync(userId);
 
             return orders.Select(order => new OrderResponseDto(
                  order.Id,
@@ -227,12 +228,24 @@ namespace megamart_backend.Services
                  order.Status,
                  order.CreatedAt,
                  order.OrderItems?.Select(oi => new OrderItemResponseDto(
-                     oi.ProductId,
-                     oi.Product?.Name ?? string.Empty,
-                     oi.Quantity,
-                     oi.UnitPrice
-                 )).ToList() ?? new List<OrderItemResponseDto>()
-            )).ToList();
+                     ProductId: oi.ProductId,
+                     ProductName: oi.Product?.Name ?? string.Empty,
+                     Quantity: oi.Quantity,
+                     UnitPrice: oi.UnitPrice,
+                     Product: oi.Product != null ? new ProductResponseDto(
+                        oi.Product.Id,
+                        oi.Product.Name,
+                        oi.Product.Price,
+                        oi.Product.StockQuantity,
+                        oi.Product.ImageUrl,
+                        oi.Product.Description,
+                        oi.Product.CategoryId,
+                        oi.Product.Category?.Name,
+                        null,
+                        null
+                        ) : null // 👈 Nested product object for thumbnail images
+                    )).ToList() ?? new List<OrderItemResponseDto>()
+                 )).ToList();   
 
         }
 

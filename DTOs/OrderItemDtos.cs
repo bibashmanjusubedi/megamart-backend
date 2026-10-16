@@ -9,6 +9,7 @@
         int ProductId,
         string ProductName,
         int Quantity,
-        decimal UnitPrice
+        decimal UnitPrice,
+        ProductResponseDto? Product = null
     );
 }
