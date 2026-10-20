@@ -38,7 +38,9 @@ namespace megamart_backend.Services
                 CreatedAt = DateTime.UtcNow,
                 Status = "Pending",
                 TotalAmount = 0m,
-                OrderItems = new List<OrderItem>()
+                OrderItems = new List<OrderItem>(),
+                DeliveryAddress = dto.DeliveryAddress,
+                PaymentMethod = dto.PaymentMethod
             };
 
 
@@ -98,6 +100,19 @@ namespace megamart_backend.Services
 
             // 3. Atomically persist order and product updates
             await _unitOfWork.Orders.AddAsync(order);
+
+            // 4. Clear/Delete Cart Items from Database upon successful order placement
+            var cart = await _unitOfWork.Carts.GetCartByUserIdAsync(userId);
+
+            if( cart != null && cart.CartItems != null && cart.CartItems.Any())
+            {
+                foreach(var cartItem in cart.CartItems.ToList())
+                {
+                    _unitOfWork.CartItems.Delete(cartItem);
+                }
+            }
+
+            // 5. Atomically commit order creation, stock updates, and cart deletion
             await _unitOfWork.CompleteAsync();
 
             return new OrderResponseDto(
@@ -106,7 +121,9 @@ namespace megamart_backend.Services
                 totalAmount: order.TotalAmount,
                 Status: order.Status,
                 CreatedAt: order.CreatedAt,
-                Items: itemDtos
+                Items: itemDtos,
+                DeliveryAddress: order.DeliveryAddress, // Pass Saved Address or Null
+                PaymentMethod: order.PaymentMethod // Pass Saved Address or Null
             );
 
         }

@@ -13,5 +13,9 @@
 
         // 1:N Navigation to OrderItem
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
+        // 👇 Nullable fields to store address and payment method
+        public string? DeliveryAddress { get; set; }
+        public string? PaymentMethod { get; set; }
     }
 }

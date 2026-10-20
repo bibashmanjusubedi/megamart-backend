@@ -74,6 +74,10 @@ namespace megamart_backend.Data
                 entity.Property(o => o.TotalAmount).HasPrecision(18, 2);
                 entity.Property(o => o.Status).HasMaxLength(50).HasDefaultValue("Pending");
 
+                // 👇 ADD THESE TWO LINES 👇
+                entity.Property(o => o.DeliveryAddress).HasMaxLength(500).IsRequired(false);
+                entity.Property(o => o.PaymentMethod).HasMaxLength(50).IsRequired(false);
+
                 // User (1:N) Order
                 entity.HasOne(o => o.User)
                       .WithMany(u => u.Orders)

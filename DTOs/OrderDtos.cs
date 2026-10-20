@@ -2,7 +2,9 @@
 {
     public record OrderCreateDto(
         int UserId,
-        List<OrderItemCreateDto> Items
+        List<OrderItemCreateDto> Items,
+        string? DeliveryAddress = null, // Optional for Normal Orders
+        string? PaymentMethod = null // Optional for Normal Orders
     );
 
     public record OrderResponseDto(
@@ -11,7 +13,9 @@
         decimal totalAmount,
         string Status,
         DateTime CreatedAt,
-        List<OrderItemResponseDto> Items
+        List<OrderItemResponseDto> Items,
+        string? DeliveryAddress = null, //Optional for Normal Orders
+        string? PaymentMethod = null // Optional for Normal Orders
     );
 
 }
