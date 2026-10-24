@@ -10,6 +10,7 @@
     public record OrderResponseDto(
         int Id,
         int UserId,
+        string Email,
         decimal totalAmount,
         string Status,
         DateTime CreatedAt,

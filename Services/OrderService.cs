@@ -2,6 +2,7 @@
 using megamart_backend.Models;
 using megamart_backend.Repositories;
 using megamart_backend.Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace megamart_backend.Services
 {
@@ -118,6 +119,7 @@ namespace megamart_backend.Services
             return new OrderResponseDto(
                 Id: order.Id,
                 UserId: order.UserId,
+                Email: user.Email ?? string.Empty,
                 totalAmount: order.TotalAmount,
                 Status: order.Status,
                 CreatedAt: order.CreatedAt,
@@ -148,6 +150,7 @@ namespace megamart_backend.Services
             return new OrderResponseDto(
                 Id: order.Id,
                 UserId: order.UserId,
+                Email: order.User?.Email ?? string.Empty,
                 totalAmount: order.TotalAmount,
                 Status: order.Status,
                 CreatedAt: order.CreatedAt,
@@ -187,6 +190,7 @@ namespace megamart_backend.Services
             return orders.Select(order => new OrderResponseDto(
                 Id: order.Id,
                 UserId: order.UserId,
+                Email:order.User?.Email ?? string.Empty,
                 totalAmount: order.TotalAmount,
                 Status: order.Status,
                 CreatedAt:order.CreatedAt,
@@ -241,6 +245,7 @@ namespace megamart_backend.Services
             return orders.Select(order => new OrderResponseDto(
                  order.Id,
                  order.UserId,
+                 Email:order.User?.Email ?? string.Empty,
                  order.TotalAmount,
                  order.Status,
                  order.CreatedAt,
