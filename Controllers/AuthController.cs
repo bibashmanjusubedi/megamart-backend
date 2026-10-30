@@ -115,5 +115,18 @@ namespace megamart_backend.Controllers
         }
 
 
+        // GET: api/auth/users (Admin Only)
+        [Authorize(Roles ="Admin")]
+        [HttpGet("users")]
+        [ProducesResponseType(typeof(IEnumerable<UserResponseDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType((StatusCodes.Status403Forbidden))]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _authService.GetAllUsersAsync();
+            return Ok(users);
+        }
+
+
     }
 }

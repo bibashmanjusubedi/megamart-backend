@@ -144,5 +144,19 @@ namespace megamart_backend.Services
             return true;
 
         }
+
+
+        public async Task<IEnumerable<UserResponseDto>> GetAllUsersAsync()
+        {
+            var users = await _unitOfWork.Users.GetAllAsync();
+
+            // Map user entities to UserResponseDto to keep data transfer secure & clean
+            return users.Select(u => new UserResponseDto(
+                u.Id,
+                u.Name,
+                u.Email,
+                u.Role  
+            ));
+        }
     }
 }
