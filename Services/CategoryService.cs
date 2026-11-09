@@ -75,9 +75,17 @@ namespace megamart_backend.Services
             {
                 return false;
             }
+            try
+            {
+                _unitOfWork.Categories.Delete(category);
+                await _unitOfWork.CompleteAsync();
+            }
+            catch(Microsoft.EntityFrameworkCore.DbUpdateException)
+            {
+                // Throw a custom exception or handle it so the controller knows it's a constraint issue
+                throw new InvalidOperationException("Cannot delete this category because there are products associated with it.");
+            }
 
-            _unitOfWork.Categories.Delete(category);
-            await _unitOfWork.CompleteAsync();
 
             return true;
         }

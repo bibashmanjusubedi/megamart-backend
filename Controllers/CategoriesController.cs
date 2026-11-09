@@ -91,13 +91,25 @@ namespace megamart_backend.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _categoryService.DeleteCategoryAsync(id);
-            if (!deleted)
+            try
             {
-                return NotFound(new { message = $"Category with ID {id} was not found" });
-            }
+                var deleted = await _categoryService.DeleteCategoryAsync(id);
+                if (!deleted)
+                {
+                    return NotFound(new { message = $"Category with ID {id} was not found" });
+                }
 
-            return NoContent();
+                return NoContent();
+
+            }
+            catch(InvalidOperationException ex)
+            {
+                // Returns a clean 400 Bad Request with the custom message to your frontend
+                return BadRequest(new { message = ex.Message });
+            }
+           
+
+           
         }
 
     }
