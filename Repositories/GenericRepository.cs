@@ -39,6 +39,18 @@ namespace megamart_backend.Repositories
 
         public void Update(T entity)
         {
+            // If the entity is already tracked, EF Core handles it automatically.
+            // If it's untracked, attach it and mark as modified:
+            //var entry = _context.Entry(entity);
+
+            //if (entry.State == EntityState.Detached)
+            //{
+            //    _dbSet.Update(entity);
+            //}
+            //else
+            //{
+            //    entry.State = EntityState.Modified;
+            //}
             _dbSet.Update(entity);
         }
 

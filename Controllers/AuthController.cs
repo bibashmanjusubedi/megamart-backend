@@ -101,7 +101,8 @@ namespace megamart_backend.Controllers
                     return NotFound(new { message = $"User with ID {id} was not found." });
                 }
 
-                return Ok(new { message = $"User ID {id} role successfully updated to {dto.Role}." });
+                return Ok(new { id = id, role = dto.Role, message = $"User ID {id} role successfully updated to {dto.Role}." });
+                //return Ok(new { message = $"User ID {id} role successfully updated to {dto.Role}." });
             }
             catch(ArgumentException ex)
             {
